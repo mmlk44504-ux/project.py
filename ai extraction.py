@@ -1,9 +1,13 @@
 import instructor
+import json
+import os
 from schema import MovieSchema
 
 MODEL = "gemma3:4b"
 
 client = instructor.from_provider(f"ollama/{MODEL}")
+
+FILE_NAME = "movies.json"
 
 SYSTEM_PROMPT = """
 Extract the movie title and review from the text.
@@ -33,8 +37,16 @@ def extract_movie(text: str) -> MovieSchema:
         ],
     )
 
-if __name__ == "__main__":
-    result = extract_movie(
-        "Inception is a mind-bending sci-fi movie by Nolan. Very confusing but brilliant."
-    )
-    print(result)
+def save_movie(movie):
+    movies = []
+
+    if os.path.exists(FILE_NAME):
+        with open(FILE_NAME, "r") as file:
+            movies = json.load(file)
+
+    movies.append({
+        "title": movie.title,
+        "review": movie.review
+    })
+
+    with open(FILE_NAME, "w") as file:
