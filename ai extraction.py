@@ -50,3 +50,13 @@ def save_movie(movie):
     })
 
     with open(FILE_NAME, "w") as file:
+        json.dump(movies, file, indent=4)
+
+if __name__ == "__main__":
+    result = extract_movie(
+        "Inception is a mind-bending sci-fi movie by Nolan. Very confusing but brilliant."
+    )
+
+    save_movie(result)
+
+    print("Movie saved successfully!")
